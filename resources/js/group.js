@@ -53,6 +53,7 @@ export default class Group {
             data.files['___upload-' + item[0]] = item[1];
         }
 
+        console.log('serialize', data);
         return data;
     }
 

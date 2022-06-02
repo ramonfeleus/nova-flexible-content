@@ -28,6 +28,13 @@
         >
             <span>{{ field.button }}</span>
         </button>
+      <button
+          @click="openPreview"
+          type="button"
+          class="btn btn-default btn-primary inline-flex items-center relative"
+      >
+        <span>Preview</span>
+      </button>
     </div>
 </template>
 
@@ -43,6 +50,17 @@
         },
 
         methods: {
+          openPreview() {
+            if (document.querySelector('form') !== null) {
+              const form = document.querySelector('form');
+              console.log(this.field.getValue());
+              console.log(Array.from(new FormData(form)));
+              // form.target = '_blank';
+              // form.action = '/nova-preview';
+              // form.method = 'post';
+              // form.submit();
+            }
+          },
             /**
              * Display or hide the layouts choice dropdown if there are multiple layouts
              * or directly add the only available layout.
