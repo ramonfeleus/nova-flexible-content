@@ -1,9 +1,11 @@
 <template>
     <div class="z-20 relative" v-if="layouts">
         <div class="relative" v-if="layouts.length > 1">
-            <div v-if="isLayoutsDropdownOpen"
-                 class="z-20 absolute rounded-lg shadow-lg max-w-full mb-3 pin-b max-h-search overflow-y-auto border border-40"
-            >
+          <div v-if="isLayoutsDropdownOpen"
+               ref="dropdown"
+               class="absolute rounded-lg shadow-lg max-w-full max-h-search overflow-y-auto border border-40"
+               v-bind:class="dropdownClasses"
+          >
                 <div>
                     <ul class="list-reset">
                         <li v-for="layout in filteredLayouts" class="border-b border-40" :key="'add-'+layout.name">
@@ -22,19 +24,13 @@
             dusk="toggle-layouts-dropdown-or-add-default"
             type="button"
             tabindex="0"
+            ref="dropdownButton"
             class="btn btn-default btn-primary inline-flex items-center relative"
             @click="toggleLayoutsDropdownOrAddDefault"
             v-if="isBelowLayoutLimits"
         >
             <span>{{ field.button }}</span>
         </button>
-      <button
-          @click="openPreview"
-          type="button"
-          class="btn btn-default btn-primary inline-flex items-center relative"
-      >
-        <span>Preview</span>
-      </button>
     </div>
 </template>
 
@@ -45,11 +41,20 @@
 
         data() {
             return {
-                isLayoutsDropdownOpen: false
+              isLayoutsDropdownOpen: false,
+              dropdownOrientation: "top",
             };
         },
 
         computed: {
+            dropdownClasses() {
+              return {
+                "pin-b": this.dropdownOrientation === "top",
+                "mb-3": this.dropdownOrientation === "top",
+                "mt-3": this.dropdownOrientation === "bottom",
+              };
+            },
+
             filteredLayouts() {
                 return this.layouts.filter(layout => {
                     const count = this.limitPerLayoutCounter[layout.name];
@@ -63,17 +68,6 @@
         },
 
         methods: {
-          openPreview() {
-            if (document.querySelector('form') !== null) {
-              const form = document.querySelector('form');
-              console.log(this.field.getValue());
-              console.log(Array.from(new FormData(form)));
-              // form.target = '_blank';
-              // form.action = '/nova-preview';
-              // form.method = 'post';
-              // form.submit();
-            }
-          },
             /**
              * Display or hide the layouts choice dropdown if there are multiple layouts
              * or directly add the only available layout.
@@ -84,6 +78,22 @@
                 }
 
                 this.isLayoutsDropdownOpen = !this.isLayoutsDropdownOpen;
+
+                this.$nextTick(() => {
+                  if (this.isLayoutsDropdownOpen) {
+                    const { top: dropdownTop } = this.$refs.dropdown.getBoundingClientRect();
+                    const { height: buttonHeight } = this.$refs.dropdownButton.getBoundingClientRect();
+                    // If the dropdown is popping out of the screen at the top,
+                    // move it to the bottom.
+                    if (dropdownTop < 0) {
+                      this.dropdownOrientation = "bottom";
+                      this.$refs.dropdown.style.top = `${buttonHeight}px`;
+                    }
+                  } else {
+                    // Reset the orientation.
+                    this.dropdownOrientation = "top";
+                  }
+                });
             },
 
             /**
@@ -96,6 +106,8 @@
                 Nova.$emit('nova-flexible-content-add-group', layout);
 
                 this.isLayoutsDropdownOpen = false;
+                // Reset the orientation.
+                this.dropdownOrientation = "top";
             },
         }
     }
