@@ -116,6 +116,18 @@ export default {
         };
     },
 
+    mounted() {
+      Nova.$on('nova-flexible-content-add-group', (layout) => {
+        this.collapsed = true;
+      });
+      Nova.$on('nova-flexible-content-collapse-group', (layout) => {
+        this.collapsed = true;
+      });
+      Nova.$on('nova-flexible-content-expand-group', (layout) => {
+        this.collapsed = false;
+      });
+    },
+
     computed: {
         titleStyle() {
             let classes = ['border-t', 'border-r', 'border-l', 'border-gray-200', 'dark:border-gray-700', 'rounded-t-lg'];
@@ -179,14 +191,14 @@ export default {
          * Expand fields
          */
         expand() {
-            this.collapsed = false;
+          this.collapsed = false;
         },
 
         /**
          * Collapse fields
          */
         collapse() {
-            this.collapsed = true;
+          this.collapsed = true;
         }
     },
 }

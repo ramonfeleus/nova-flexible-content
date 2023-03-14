@@ -68,7 +68,7 @@ trait TransformsFlexibleErrors
         foreach ($errors as $key => $messages) {
             $attribute = Flexible::getValidationKey($key);
 
-            if (! $attribute) {
+            if (! $attribute) {//happens: custom field does not register validation keys
                 $parsed[$key] = $messages;
 
                 continue;

@@ -36,6 +36,8 @@
                 :resource-name="resourceName"
                 :resource-id="resourceId"
                 @addGroup="addGroup($event)"
+                @collapseAll="collapseGroups"
+                @expandAll="expandGroups"
             />
 
         </template>
@@ -196,6 +198,20 @@ export default {
                     this.currentField.collapsed
                 );
             }
+        },
+
+        collapseGroups() {
+          for (var i = 0; i < Object.keys(this.groups).length; i++) {
+            const group = this.groups[Object.keys(this.groups)[i]].serialize();
+            Nova.$emit('nova-flexible-content-collapse-group', group);
+          }
+        },
+
+        expandGroups() {
+          for (var i = 0; i < Object.keys(this.groups).length; i++) {
+            const group = this.groups[Object.keys(this.groups)[i]].serialize();
+            Nova.$emit('nova-flexible-content-expand-group', group);
+          }
         },
 
         /**

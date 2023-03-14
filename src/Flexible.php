@@ -575,7 +575,11 @@ class Flexible extends Field
 
             $scope = ScopedRequest::scopeFrom($request, $item['attributes'], $item['key']);
 
-            return $group->generateRules($scope, $specificty, $this->attribute.'.'.$key);
+            $rules = $group->generateRules($scope, $specificty, $this->attribute.'.'.$key);
+//            if (count($rules) == 0) {
+//                var_dump($rules,  $item, $specificty, $this->attribute.'.'.$key);
+//            }
+            return $rules;
         })
                 ->collapse()
                 ->all();

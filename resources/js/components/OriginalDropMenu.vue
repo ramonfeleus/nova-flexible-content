@@ -26,6 +26,8 @@
         >
             <span>{{ field.button }}</span>
         </default-button>
+        <outline-button type="button" @click="clickCollapseAll" style="margin-left: 16px;">Alles inklappen</outline-button>
+        <outline-button type="button" @click="clickExpandAll" style="margin-left: 16px;">Alles uitklappen</outline-button>
     </div>
 </template>
 
@@ -34,7 +36,7 @@
     export default {
         props: ['layouts', 'field', 'resourceName', 'resourceId', 'resource', 'errors', 'limitCounter', 'limitPerLayoutCounter'],
 
-        emits: ['addGroup'],
+        emits: ['addGroup', 'collapseAll', 'expandAll'],
 
         data() {
             return {
@@ -107,6 +109,13 @@
                 // Reset the orientation.
                 this.dropdownOrientation = 'top';
             },
+
+          clickCollapseAll() {
+            this.$emit('collapseAll');
+          },
+          clickExpandAll() {
+            this.$emit('expandAll');
+          }
         }
     }
 </script>
