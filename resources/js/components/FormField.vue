@@ -7,6 +7,20 @@
         :show-help-text="showHelpText"
         full-width-content>
         <template #field>
+            <component
+                :layouts="layouts"
+                :is="currentField.menu.component"
+                :field="currentField"
+                :limit-counter="limitCounter"
+                :limit-per-layout-counter="limitPerLayoutCounter"
+                :errors="errors"
+                :resource-name="resourceName"
+                :resource-id="resourceId"
+                :top="true"
+                @addGroup="addGroup($event)"
+                @collapseAll="collapseGroups"
+                @expandAll="expandGroups"
+            />
 
             <div ref="flexibleFieldContainer">
                 <form-nova-flexible-content-group
@@ -35,6 +49,7 @@
                 :errors="errors"
                 :resource-name="resourceName"
                 :resource-id="resourceId"
+                :top="false"
                 @addGroup="addGroup($event)"
                 @collapseAll="collapseGroups"
                 @expandAll="expandGroups"

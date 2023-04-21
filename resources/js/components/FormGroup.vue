@@ -118,13 +118,17 @@ export default {
 
     mounted() {
       Nova.$on('nova-flexible-content-add-group', (layout) => {
-        this.collapsed = true;
+        // this.collapsed = true;
       });
       Nova.$on('nova-flexible-content-collapse-group', (layout) => {
-        this.collapsed = true;
+        if (layout.key === this.group.key) {
+          this.collapsed = true;
+        }
       });
       Nova.$on('nova-flexible-content-expand-group', (layout) => {
-        this.collapsed = false;
+        if (layout.key === this.group.key) {
+          this.collapsed = false;
+        }
       });
     },
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="relative" v-if="layouts">
+    <div class="relative" v-bind:class="top ? ' mb-4' : ''" v-if="layouts">
         <div v-if="isLayoutsDropdownOpen && layouts.length > 1"
                 ref="dropdown"
                 class="z-20 absolute rounded-lg shadow-lg max-w-full max-h-search overflow-y-auto border border-40"
@@ -10,7 +10,7 @@
                     <a
                         :dusk="'add-' + layout.name"
                         @click="addGroup(layout)"
-                        class="cursor-pointer flex items-center hover:bg-gray-50 dark:hover:bg-gray-900 block py-2 px-3 no-underline font-normal bg-white dark:bg-gray-800">
+                        class="cursor-pointer flex items-center hover:bg-gray-50 dark:hover:bg-gray-700 block py-2 px-3 no-underline font-normal bg-white dark:bg-gray-800 z-10">
                         <div><p class="text-90">{{ layout.title }}</p></div>
                     </a>
                 </li>
@@ -22,7 +22,7 @@
             tabindex="0"
             ref="dropdownButton"
             @click="toggleLayoutsDropdownOrAddDefault"
-            v-if="isBelowLayoutLimits"
+            v-if="isBelowLayoutLimits && !hideAdd"
         >
             <span>{{ field.button }}</span>
         </default-button>
@@ -34,7 +34,7 @@
 <script>
 
     export default {
-        props: ['layouts', 'field', 'resourceName', 'resourceId', 'resource', 'errors', 'limitCounter', 'limitPerLayoutCounter'],
+        props: ['layouts', 'field', 'resourceName', 'resourceId', 'resource', 'errors', 'limitCounter', 'limitPerLayoutCounter', 'top'],
 
         emits: ['addGroup', 'collapseAll', 'expandAll'],
 
