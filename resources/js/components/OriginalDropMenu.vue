@@ -26,8 +26,8 @@
         >
             <span>{{ field.button }}</span>
         </default-button>
-        <outline-button type="button" @click="clickCollapseAll" style="margin-left: 16px;">Alles inklappen</outline-button>
-        <outline-button type="button" @click="clickExpandAll" style="margin-left: 16px;">Alles uitklappen</outline-button>
+        <outline-button type="button" @click="clickCollapseAll" style="margin-left: 16px;">{{ field.buttonCollapse }}</outline-button>
+        <outline-button type="button" @click="clickExpandAll" style="margin-left: 16px;">{{ field.buttonExpand }}</outline-button>
     </div>
 </template>
 

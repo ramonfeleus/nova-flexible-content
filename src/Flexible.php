@@ -72,6 +72,8 @@ class Flexible extends Field
         parent::__construct($name, $attribute, $resolveCallback);
 
         $this->button(__('Add layout'));
+        $this->buttonCollapse(__('Collapse all'));
+        $this->buttonExpand(__('Expand all'));
 
         // The original menu as default
         $this->menu('flexible-drop-menu');
@@ -98,6 +100,28 @@ class Flexible extends Field
     public function button($label)
     {
         return $this->withMeta(['button' => $label]);
+    }
+
+    /**
+     * Set the button's label
+     *
+     * @param  string  $label
+     * @return $this
+     */
+    public function buttonCollapse($label)
+    {
+        return $this->withMeta(['buttonCollapse' => $label]);
+    }
+
+    /**
+     * Set the button's label
+     *
+     * @param  string  $label
+     * @return $this
+     */
+    public function buttonExpand($label)
+    {
+        return $this->withMeta(['buttonExpand' => $label]);
     }
 
     /**
