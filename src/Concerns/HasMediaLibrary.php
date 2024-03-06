@@ -18,6 +18,11 @@ trait HasMediaLibrary
 {
     use InteractsWithMedia;
 
+    public function getMediaModel(): string
+    {
+        return $this->getUnderlyingMediaModel();
+    }
+
     /**
      * Return the underlying model implementing the HasMedia interface
      *
@@ -28,7 +33,8 @@ trait HasMediaLibrary
         $model = Flexible::getOriginModel() ?? $this->model;
 
         while ($model instanceof Layout) {
-            $model = $model->getMediaModel();
+        //tweaked
+            $model = $model->model ?? $model->getMediaModel();
         }
 
         if (is_null($model) || ! ($model instanceof HasMedia)) {
