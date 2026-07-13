@@ -4,6 +4,7 @@
                 ref="dropdown"
                 class="z-20 absolute rounded-lg shadow-lg max-w-full max-h-search overflow-y-auto border border-40"
                 v-bind:class="dropdownClasses"
+                :style="{ maxHeight: dropdownMaxHeight }"
         >
             <ul class="list-reset">
                 <li v-for="layout in filteredLayouts" class="border-b border-gray-100 dark:border-gray-700" :key="'add-'+layout.name">
@@ -42,6 +43,7 @@
             return {
                 isLayoutsDropdownOpen: false,
                 dropdownOrientation: 'bottom',
+                dropdownMaxHeight: null,
             };
         },
 
@@ -80,17 +82,26 @@
 
                 this.isLayoutsDropdownOpen = !this.isLayoutsDropdownOpen;
 
-                this.$nextTick(() => {
-                    if (this.isLayoutsDropdownOpen) {
-                        const { bottom: dropdownBottom } = this.$refs.dropdown.getBoundingClientRect();
+                if (!this.isLayoutsDropdownOpen) {
+                    this.dropdownOrientation = 'bottom';
+                    this.dropdownMaxHeight = null;
+                    return;
+                }
 
-                        // If the dropdown is popping out of the bottom of the window, pin it to the top of the button.
-                        if (dropdownBottom > window.innerHeight) {
-                            this.dropdownOrientation = 'top';
-                        }
-                    } else {
-                        // Reset the orientation.
+                this.$nextTick(() => {
+                    const buttonRect = this.$refs.dropdownButton.$el.getBoundingClientRect();
+                    const spaceBelow = window.innerHeight - buttonRect.bottom;
+                    const spaceAbove = buttonRect.top;
+
+                    // Open toward whichever side has more room and cap the height to that
+                    // space, so the list never runs off-screen and overflow-y-auto can scroll.
+                    // ponytail: 16px = the mt-3/mb-3 gap + a little breathing room.
+                    if (spaceBelow >= spaceAbove) {
                         this.dropdownOrientation = 'bottom';
+                        this.dropdownMaxHeight = (spaceBelow - 16) + 'px';
+                    } else {
+                        this.dropdownOrientation = 'top';
+                        this.dropdownMaxHeight = (spaceAbove - 16) + 'px';
                     }
                 });
             },
@@ -108,6 +119,7 @@
 
                 // Reset the orientation.
                 this.dropdownOrientation = 'top';
+                this.dropdownMaxHeight = null;
             },
 
           clickCollapseAll() {
